@@ -1,91 +1,108 @@
-# Experimento 01 – Web Crawler com Scrapy
+# 🕷️ Crawler — Ranking The Brands
 
-## 📌 Objetivo
-
-Desenvolver um crawler utilizando o framework **Scrapy** para coletar marcas iniciadas pelas letras **A** e **B** no site:
-
-https://www.rankingthebrands.com
+Crawler desenvolvido com **Scrapy** para coletar todas as marcas de A a Z do site [Ranking The Brands](https://www.rankingthebrands.com) e armazená-las no **MongoDB**.
 
 ---
 
-## 🛠 Tecnologias Utilizadas
+## 📋 Sobre o Projeto
 
-- Python 3.12
-- Scrapy 2.14.1
+O projeto realiza a raspagem automática de marcas cadastradas no site Ranking The Brands, filtrando letra por letra (A–Z) e salvando os dados coletados em um banco de dados MongoDB.
 
 ---
 
-## 📂 Estrutura do Projeto
+## ✨ Funcionalidades
+
+- 🔤 **Coleta A–Z** — percorre todas as letras do alfabeto automaticamente
+- 🗄️ **Armazenamento no MongoDB** — salva nome, URL da marca e URL de origem
+- 🧹 **Limpeza automática** — apaga os dados anteriores antes de cada coleta
+- 🤖 **Respeito ao robots.txt** — coleta responsável com delay entre requisições
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+
+| Tecnologia | Uso |
+|------------|-----|
+| Python | Linguagem principal |
+| Scrapy | Framework de crawling |
+| PyMongo | Conexão com MongoDB |
+| python-dotenv | Gerenciamento de variáveis de ambiente |
+
+---
+
+## 📁 Estrutura do Projeto
 
 ```
-
 crawler-ranking-brands/
-│
 ├── experimentos/
-│   └── exp01-crawler-ranking-brands-ab.py
-├── README.md
-└── requirements.txt
-
+│   └── exp01-crawler-ranking-brands-ab.py  # Spider principal
+├── marcas_ab.json                           # Exemplo de saída
+├── requirements.txt                         # Dependências
+├── .env                                     # Variáveis de ambiente (não versionado)
+└── .gitignore
 ```
 
 ---
 
-## ▶️ Como Executar
+## ⚙️ Como Rodar o Projeto
 
-1️⃣ Instalar dependências:
+### Pré-requisitos
+- Python 3.8+
+- MongoDB rodando localmente ou URI de conexão
 
+### 1. Clone o repositório
+```bash
+git clone https://github.com/felipecorsopretoni/crawler-ranking-brands.git
+cd crawler-ranking-brands
 ```
 
+### 2. Instale as dependências
+```bash
 pip install -r requirements.txt
-
 ```
 
-ou
-
+### 3. Configure o `.env`
+Crie um arquivo `.env` na raiz com:
+```env
+MONGO_URI=mongodb://localhost:27017
 ```
 
-pip install scrapy
-
-```
-
-2️⃣ Executar a spider:
-
-```
-
-python -m scrapy runspider experimentos/exp01-crawler-ranking-brands-ab.py -O marcas_ab.json
-
+### 4. Execute o crawler
+```bash
+python -m scrapy runspider experimentos/exp01-crawler-ranking-brands-ab.py
 ```
 
 ---
 
-## 📦 Saída
+## 🗄️ Estrutura dos Dados no MongoDB
 
-O crawler gera o arquivo:
+Cada documento salvo na collection `brands` segue o formato:
 
+```json
+{
+  "letter": "A",
+  "brand_name": "Apple",
+  "brand_url": "https://www.rankingthebrands.com/Brand-detail.aspx?brandID=1",
+  "source_url": "https://www.rankingthebrands.com/The-Brands-and-their-Rankings.aspx?catFilter=0&nameFilter=A"
+}
 ```
-
-marcas_ab.json
-
-```
-
-Cada item contém:
-
-- `letter` → Letra filtrada (A ou B)
-- `brand_name` → Nome da marca
-- `brand_url` → Link da marca
-- `source_url` → Página de origem
 
 ---
 
-## ⚙️ Configurações do Crawler
+## ⚠️ Boas Práticas Aplicadas
 
-- Respeita o arquivo `robots.txt`
-- Delay de 1 segundo entre requisições
-- Limite de 2 requisições simultâneas por domínio
-- User-Agent personalizado
+- `ROBOTSTXT_OBEY: True` — respeita as regras do site
+- `DOWNLOAD_DELAY: 1.0` — intervalo de 1 segundo entre requisições
+- `CONCURRENT_REQUESTS_PER_DOMAIN: 2` — limite de requisições simultâneas
 
 ---
 
 ## 👨‍💻 Autor
 
-Felipe Corso Pretoni
+**Felipe Corso Pretoni**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/felipe-corso-pretoni)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/felipecorsopretoni)
